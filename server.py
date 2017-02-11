@@ -26,7 +26,7 @@ def generate(username):
     result = ""
     tweets = twitter.get_user_timeline(screen_name=username, count=200, include_rts=False)
     for tweet in tweets:
-        content = re.sub(r'(@([a-zA-Z0-9]){1,15} )|((http|https):\/\/t\.co\/([a-zA-Z0-9]){10})', '', tweet['text']) + "\n"
+        content = re.sub(r'(@([a-zA-Z0-9]){1,15} )|((http|https):\/\/t\.co\/([a-zA-Z0-9]){10})', '', tweet['text'] + ' ') + "\n"
         result += content + "\n"
     return result
 
