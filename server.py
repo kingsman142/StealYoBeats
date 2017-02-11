@@ -2,6 +2,7 @@ from flask import Flask
 from twython import Twython
 import ConfigParser
 import json
+import re
 
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
@@ -16,7 +17,8 @@ twitter = Twython(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_KEY,ACCESS_SECRET)
 app = Flask(__name__)
 
 @app.route("/")
-def run():
+@app.route("/home")
+def home():
     return "Running"
 
 @app.route("/generate/<username>")
@@ -24,7 +26,8 @@ def generate(username):
     result = ""
     tweets = twitter.get_user_timeline(screen_name=username, count=200, include_rts=False)
     for tweet in tweets:
-        result += tweet['text'] + "\n"
+        content = re.sub(r'(@([a-zA-Z0-9]){1,15} )|((http|https):\/\/t\.co\/([a-zA-Z0-9]){10})', '', tweet['text']) + "\n"
+        result += content + "\n"
     return result
 
 if __name__ == "__main__":
